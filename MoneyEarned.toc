@@ -1,0 +1,5 @@
+## Interface: 11302
+## Title: Money Earned
+## SavedVariables: MoneyEarned
+MoneyEarned.lua
+MoneyEarned.xml
