@@ -4,6 +4,8 @@ local _, ns = ...;
 ns.blnDebug = false;
 ns.blnPrinted = false;
 ns.intMyMoney = 0;
+ns.strChatFrameName = "Money";
+ns.intChatTab = 1;
 ns.strChatFrame = "";
 ns.strName = "|cff628ea5MoneyEarned|r";
 ns.tblFrame = CreateFrame("Frame");
@@ -38,7 +40,9 @@ end
 ]]
 function ns.getChatFrame()
 	ns.debug("getChatFrame()");
-	return ns.strChatFrame or DEFAULT_CHAT_FRAME;
+	ns.debug(ns.intChatTab);
+	
+	return ns.strChatFrame or "ChatFrame1";
 end
 
 --[[
@@ -66,7 +70,7 @@ function ns.onClosed()
 	ns.intMoneyEarned = GetMoney() - ns.intMyMoney;
 	ns.strSign = ns.intMoneyEarned < 0 and "-" or "+";
 	if ns.intMoneyEarned ~= 0 and ns.blnPrinted == false then
-		ns.printToChatFrame(ns.strSign .. GetCoinTextureString(math.abs(ns.intMoneyEarned)), "Money");
+		ns.printToChatFrame(ns.strSign .. GetCoinTextureString(math.abs(ns.intMoneyEarned)));
 		ns.blnPrinted = true;
 	end
 end
@@ -78,7 +82,7 @@ function ns.printToChatFrame(strMessage)
 	ns.debug("printToChatFrame()");
 	ns.debug("strMessage: " .. strMessage);
 
-	ns.debug("Print to " .. ns.getChatFrame());
+	ns.debug("Print to " .. ns.strChatFrame);
 	_G[ns.getChatFrame()]:AddMessage(strMessage);
 end
 
@@ -100,7 +104,6 @@ end
 function ns.setChatFrame(strName)
 	ns.debug("setChatFrame()");
 	ns.debug("strName: " .. strName);
-	local intChatTab = 1;
 	local strChatFrameName = "";
 	
 	for intTab = 1, NUM_CHAT_WINDOWS do
@@ -109,11 +112,11 @@ function ns.setChatFrame(strName)
 		ns.debug("ChatFrameName: " .. strChatFrameName);
 		
 		if strChatFrameName == strName then
-			intChatTab = intTab;
+			ns.intChatTab = intTab;
 			break;
 		end
 	end
-	ns.strChatFrame = "ChatFrame" .. intChatTab;
+	ns.strChatFrame = "ChatFrame" .. ns.intChatTab;
 	ns.debug("Set ChatFrame to " .. ns.strChatFrame);
 end
 
@@ -158,7 +161,7 @@ end
 ]]
 function ns.init()
 	ns.debug("init()");
-	ns.setChatFrame("Money");
+	ns.setChatFrame(ns.strChatFrameName);
 	ns.setEvents();
 	ns.setSlashCommands();
 	ns.registerEvents();
